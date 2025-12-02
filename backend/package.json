@@ -4,8 +4,6 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-   "start":"server.js",
-   "vercel-start": "server.js"
   },
   "keywords": [],
   "author": "",
