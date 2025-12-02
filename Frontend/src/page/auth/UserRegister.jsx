@@ -37,7 +37,7 @@ const UserRegister = () => {
 
     try {
       const response = await axios.post(
-        "reelers-vgnf-nudk1iqfc-afsaar-ansaris-projects-4b38e79e.vercel.app/api/auth/user/register",
+        "http://localhost:3000/api/auth/user/register",
         payload,
         { withCredentials: true } // helps cookie store
       );

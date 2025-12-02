@@ -4,8 +4,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build":"npm install && npm install --prefix frontend && npm run dev build --prefix frontend",
-    "start":"node backend/server.js"
+    "postinstall": "npm install --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "start": "node backend/server.js"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +23,8 @@
     "mongoose": "^8.19.3",
     "multer": "^2.0.2",
     "uuid": "^13.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

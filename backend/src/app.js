@@ -8,7 +8,7 @@ import foodPartnerRoutes from './routes/food-partner.routes.js'
 
 const app = express();
 app.use(cors({
-  origin:"reelers-vgnf-nudk1iqfc-afsaar-ansaris-projects-4b38e79e.vercel.app",
+  origin:"http://localhost:5173",
   credentials:true
 }));
 
