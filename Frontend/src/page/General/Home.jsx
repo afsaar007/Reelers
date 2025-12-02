@@ -136,7 +136,7 @@ async function likeVideo(item){
           <span className="text-2xl"><i className="ri-home-smile-line"></i></span>
           <span className="text-xs">Home</span>
         </Link>
-        <Link to="/"><h1 className="text-black"> Sing Up</h1></Link>
+        <Link to="/user/register"><h1 className="text-black"> Sing Up</h1></Link>
         <Link to="/saved" className="flex flex-col items-center text-gray-700">
           <span className="text-2xl"><i className="ri-chat-download-line"></i></span>
           <span className="text-xs">Saved</span>
