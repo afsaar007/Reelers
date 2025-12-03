@@ -3,6 +3,12 @@ import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken"
 
 
+function getTokenFromRequest(req) {
+  const cookieToken = req.cookies?.token;
+  const header = req.headers?.authorization;
+  const bearerToken = header && header.startsWith("Bearer ") ? header.split(" ")[1] : null;
+  return cookieToken || bearerToken || null;
+}
 
 async function authFoodPartnerMiddleware(req,res,next){
 
@@ -64,5 +70,5 @@ async function authUserMiddleware(req,res,next){
 
 
 export default {authFoodPartnerMiddleware,
-    authUserMiddleware
+    authUserMiddleware,getTokenFromRequest
 }
