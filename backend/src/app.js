@@ -8,9 +8,10 @@ import foodPartnerRoutes from './routes/food-partner.routes.js'
 
 const app = express();
 app.use(cors({
-  origin:"http://localhost:5173",
+  origin:["http://localhost:5173","https://reelers-9.onrender.com"],
   credentials:true
 }));
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -22,10 +23,10 @@ app.use('/api/food-partner', foodPartnerRoutes);
 
 
 
-// 404 fallback last middaleware
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+// // 404 fallback last middaleware
+// app.use((req, res) => {
+//   res.status(404).json({ message: "Route not found" });
+// });
 
 
 export default app;
