@@ -11,7 +11,7 @@ app.use(cors({
   origin:["http://localhost:5173","https://reelers-9.onrender.com"],
   credentials:true
 }));
-
+app.set("trust proxy", 1);
 
 app.use(express.json());
 app.use(cookieParser());
