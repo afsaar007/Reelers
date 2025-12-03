@@ -8,9 +8,9 @@ import app from "./src/app.js";
 connectDB();
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  /// callback
-  console.log(`Server is running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   /// callback
+//   console.log(`Server is running on port ${PORT}`);
+// });
 
 export default app

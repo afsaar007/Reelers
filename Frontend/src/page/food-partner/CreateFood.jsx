@@ -93,7 +93,7 @@ const CreateFood = () => {
             // reset states or navigate
             setUploading(false);
             setUploadProgress(0);
-            navigate("/home/feed");
+            navigate("/");
         } catch (err) {
             if (axios.isCancel(err)) {
                 setUploadError('Upload cancelled.');

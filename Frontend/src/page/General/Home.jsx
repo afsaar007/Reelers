@@ -12,13 +12,16 @@ const Home = () => {
       .get("http://localhost:3000/api/food", { withCredentials: true })
       .then((res) => {
        
-        setVideos(
-          res.data.foodItems.map((v) => ({
-            ...v,
-            likes: v.likes || 0,
-            saves: v.saves || 0,
-            isSaved: false,
-          }))
+       // use this in the initial fetch
+setVideos(
+  res.data.foodItems.map((v) => ({
+    ...v,
+    likeCount: v.likeCount ?? v.likes ?? 0,
+    savesCount: v.savesCount ?? v.saves ?? 0,
+    isSaved: v.isSaved ?? false,
+  }))
+
+
         );
       })
       .catch((err) => console.error("Error fetching videos:", err));
@@ -59,7 +62,7 @@ async function likeVideo(item){
 
   // Toggle save
  async function saveVideo(item) {
-        const response = await axios.post("http://localhost:3000/api/food/save", { foodId: item._id }, { withCredentials: true })
+        const response = await axios.post("http://localhost:300/api/food/save", { foodId: item._id }, { withCredentials: true })
         
         if(response.data.save){
             setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: v.savesCount + 1 } : v))

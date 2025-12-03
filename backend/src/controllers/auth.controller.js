@@ -38,7 +38,8 @@ async function registerUser(req, res) {
     // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
     });
 
     // Success response
@@ -77,7 +78,11 @@ async function loginUser(req, res) {
     });
   }
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
 
   res.status(200).json({
     message: "User logged in successfully",
@@ -134,7 +139,7 @@ async function registerFoodPartner (req, res){
     // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     });
 
@@ -188,7 +193,8 @@ async function loginFoodPartner(req, res) {
 
   res.cookie("token", token, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
   });
 
  return res.status(200).json({
