@@ -1,46 +1,41 @@
-// create server 
-import express from "express"
+// app.js (replace previous cors setup)
+import express from "express";
 import cookieParser from "cookie-parser";
-import authRoutes from "./routes/auth.routes.js"
-import foodRoutes from './routes/food.routes.js'
-import cors from 'cors';
-import foodPartnerRoutes from './routes/food-partner.routes.js'
+import cors from "cors";
+// ... other imports
 
 const app = express();
-app.use(cors({
-  origin:["http://localhost:5173", "reelers-9.onrender.com"],
-  
-}));
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://reelers-9.onrender.com' // add production origin when ready
+];
 
-app.use(cors({
-  origin: function(origin, callback){
-    // allow requests with no origin (like curl, mobile apps)
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+const corsOptions = {
+  origin: function(origin, callback) {
+    // allow non-origin requests (curl, mobile)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('Not allowed by CORS'), false);
     }
     return callback(null, true);
   },
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization','Range','Accept'],
-}));
+  allowedHeaders: ['Content-Type', 'Authorization', 'Range', 'Accept'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // explicit preflight handling
+
 app.use(express.json());
 app.use(cookieParser());
 
-
+// routes...
 app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/food-partner', foodPartnerRoutes);
-
-
-
-// // 404 fallback last middaleware
-// app.use((req, res) => {
-//   res.status(404).json({ message: "Route not found" });
-// });
-
 
 export default app;
