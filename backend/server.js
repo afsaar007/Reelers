@@ -7,9 +7,6 @@ import app from "./src/app.js";
 
 connectDB();
 
-app.use("/",(req,res)=>{
-  res.send("hellow bro")
-})
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   /// callback
