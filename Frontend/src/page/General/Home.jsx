@@ -9,7 +9,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("https://reelers-2-mbh2.onrender.com/api/food", {
+      .get("https://reelers-yv6s.onrender.com/api/food", {
         withCredentials: true,
       })
       .then((res) => {
@@ -49,7 +49,7 @@ const Home = () => {
 
   async function likeVideo(item) {
     const response = await axios.post(
-      "https://reelers-2-mbh2.onrender.com/api/food/like",
+      "https://reelers-yv6s.onrender.com/api/food/like",
       { foodId: item._id },
       { withCredentials: true }
     );
@@ -71,7 +71,7 @@ const Home = () => {
   // Toggle save
   async function saveVideo(item) {
     const response = await axios.post(
-      "https://reelers-2-mbh2.onrender.com/api/food/save",
+      "https://reelers-yv6s.onrender.com/api/food/save",
       { foodId: item._id },
       { withCredentials: true }
     );
