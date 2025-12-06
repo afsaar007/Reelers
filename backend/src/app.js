@@ -23,10 +23,10 @@ app.use('/api/food-partner', foodPartnerRoutes);
 
 
 
-// // 404 fallback last middaleware
-// app.use((req, res) => {
-//   res.status(404).json({ message: "Route not found" });
-// });
+// 404 fallback last middaleware
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 
 export default app;
