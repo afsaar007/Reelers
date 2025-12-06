@@ -17,8 +17,8 @@ const Home = () => {
         setVideos(
           res.data.foodItems.map((v) => ({
             ...v,
-            likeCount: v.likeCount ?? v.likes ?? 0,
-            savesCount: v.savesCount ?? v.saves ?? 0,
+            likeCount: Number(v.likeCount ?? v.likes ?? 0),
+            savesCount: Number(v.savesCount ?? v.saves ?? 0),
             isSaved: v.isSaved ?? false,
           }))
         );
@@ -44,7 +44,6 @@ const Home = () => {
       { threshold: 0.9 } // Play video when 90% visible
     );
 
-    // Observe all videos
     videoRefs.current.forEach((video) => observer.observe(video));
 
     return () => {
@@ -60,12 +59,13 @@ const Home = () => {
         { foodId: item._id },
         { withCredentials: true }
       );
+      console.log("Like response:", response.data);
 
-      const didLike = response.data.like; // true if liked, false if unliked
+      const didLike = !!response.data.like; // ensure boolean
       setVideos((prev) =>
         prev.map((v) =>
           v._id === item._id
-            ? { ...v, likeCount: Math.max(0, v.likeCount + (didLike ? 1 : -1)) }
+            ? { ...v, likeCount: Math.max(0, (v.likeCount || 0) + (didLike ? 1 : -1)) }
             : v
         )
       );
@@ -82,14 +82,15 @@ const Home = () => {
         { foodId: item._id },
         { withCredentials: true }
       );
+      console.log("Save response:", response.data);
 
-      const didSave = response.data.save; // true if saved, false if unsaved
+      const didSave = !!response.data.save; // ensure boolean
       setVideos((prev) =>
         prev.map((v) =>
           v._id === item._id
             ? {
                 ...v,
-                savesCount: Math.max(0, v.savesCount + (didSave ? 1 : -1)),
+                savesCount: Math.max(0, (v.savesCount || 0) + (didSave ? 1 : -1)),
                 isSaved: didSave,
               }
             : v
@@ -136,7 +137,9 @@ const Home = () => {
           >
             {/* Video */}
             <video
-              ref={(el) => el && videoRefs.current.set(item._id, el)}
+              ref={(el) => {
+                if (el) videoRefs.current.set(item._id, el);
+              }}
               src={item.video}
               className="h-full w-full object-cover"
               muted
@@ -145,7 +148,7 @@ const Home = () => {
             />
 
             {/* RIGHT SIDE ICONS */}
-            <div className="absolute right-4 bottom-32 flex flex-col items-center space-y-6 text-white text-3xl">
+            <div className="absolute right-4 bottom-32 flex flex-col items-center space-y-6 text-white text-3xl z-10">
               {/* Like */}
               <button
                 onClick={() => likeVideo(item)}
@@ -171,7 +174,7 @@ const Home = () => {
             </div>
 
             {/* BOTTOM CONTENT */}
-            <div className="absolute bottom-0 w-full bg-gradient-to from-black to-transparent p-5 pb-24 text-white">
+            <div className="absolute bottom-0 w-full bg-gradient-to from-black to-transparent p-5 pb-24 text-white z-10">
               <p className="font-semibold text-lg mb-1">{item.name}</p>
               <p className="text-sm mb-3 opacity-90">{item.description}</p>
 
@@ -190,7 +193,7 @@ const Home = () => {
       )}
 
       {/* BOTTOM NAV BAR */}
-      <div className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg flex justify-around py-3">
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t shadow-lg flex justify-around py-3 z-20">
         <Link to="/" className="flex flex-col items-center text-gray-700">
           <span className="text-2xl">
             <i className="ri-home-smile-line"></i>
