@@ -44,6 +44,7 @@ const Home = () => {
       { threshold: 0.9 } // Play video when 90% visible
     );
 
+    // Observe all videos
     videoRefs.current.forEach((video) => observer.observe(video));
 
     return () => {
@@ -53,44 +54,53 @@ const Home = () => {
 
   // Like video
   async function likeVideo(item) {
-    const response = await axios.post(
-      "https://reelers-yv6s.onrender.com/api/food/like",
-      { foodId: item._id },
-      { withCredentials: true }
-    );
+    try {
+      const response = await axios.post(
+        "https://reelers-yv6s.onrender.com/api/food/like",
+        { foodId: item._id },
+        { withCredentials: true }
+      );
 
-    setVideos((prev) =>
-      prev.map((v) =>
-        v._id === item._id
-          ? { ...v, likeCount: v.likeCount + (response.data.like ? 1 : -1) }
-          : v
-      )
-    );
+      const didLike = response.data.like; // true if liked, false if unliked
+      setVideos((prev) =>
+        prev.map((v) =>
+          v._id === item._id
+            ? { ...v, likeCount: Math.max(0, v.likeCount + (didLike ? 1 : -1)) }
+            : v
+        )
+      );
+    } catch (err) {
+      console.error("Error liking video:", err);
+    }
   }
 
   // Save video
   async function saveVideo(item) {
-    const response = await axios.post(
-      "https://reelers-yv6s.onrender.com/api/food/save",
-      { foodId: item._id },
-      { withCredentials: true }
-    );
+    try {
+      const response = await axios.post(
+        "https://reelers-yv6s.onrender.com/api/food/save",
+        { foodId: item._id },
+        { withCredentials: true }
+      );
 
-   setVideos((prev) =>
-  prev.map((v) =>
-    v._id === item._id
-      ? { 
-          ...v, 
-          savesCount: Math.max(0, v.savesCount + (response.data.save ? 1 : -1)),
-          isSaved: response.data.save // Update saved status too
-        }
-      : v
-  )
-);
-
+      const didSave = response.data.save; // true if saved, false if unsaved
+      setVideos((prev) =>
+        prev.map((v) =>
+          v._id === item._id
+            ? {
+                ...v,
+                savesCount: Math.max(0, v.savesCount + (didSave ? 1 : -1)),
+                isSaved: didSave,
+              }
+            : v
+        )
+      );
+    } catch (err) {
+      console.error("Error saving video:", err);
+    }
   }
 
-  // Optional: manual scroll snapping (smooth one-at-a-time scroll)
+  // Smooth scroll snapping
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -106,7 +116,7 @@ const Home = () => {
           top: index * height,
           behavior: "smooth",
         });
-      }, 50); // Debounce to avoid jank
+      }, 50);
     };
 
     container.addEventListener("scroll", handleScroll, { passive: true });
