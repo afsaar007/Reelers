@@ -7,13 +7,13 @@ const Home = () => {
   const videoRefs = useRef(new Map());
   const containerRef = useRef(null);
 
+  // Fetch videos
   useEffect(() => {
     axios
       .get("https://reelers-yv6s.onrender.com/api/food", {
         withCredentials: true,
       })
       .then((res) => {
-        // use this in the initial fetch
         setVideos(
           res.data.foodItems.map((v) => ({
             ...v,
@@ -26,7 +26,7 @@ const Home = () => {
       .catch((err) => console.error("Error fetching videos:", err));
   }, []);
 
-  // Autoplay when visible
+  // Autoplay/pause videos when visible
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -34,10 +34,14 @@ const Home = () => {
           const video = entry.target;
           if (!(video instanceof HTMLVideoElement)) return;
 
-          entry.isIntersecting ? video.play().catch(() => {}) : video.pause();
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
         });
       },
-      { threshold: 0.75 }
+      { threshold: 0.9 } // Play video when 90% visible
     );
 
     videoRefs.current.forEach((video) => observer.observe(video));
@@ -47,28 +51,24 @@ const Home = () => {
     };
   }, [videos]);
 
+  // Like video
   async function likeVideo(item) {
     const response = await axios.post(
       "https://reelers-yv6s.onrender.com/api/food/like",
       { foodId: item._id },
       { withCredentials: true }
     );
-    if (response.data.like) {
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, likeCount: v.likeCount + 1 } : v
-        )
-      );
-    } else {
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, likeCount: v.likeCount - 1 } : v
-        )
-      );
-    }
+
+    setVideos((prev) =>
+      prev.map((v) =>
+        v._id === item._id
+          ? { ...v, likeCount: v.likeCount + (response.data.like ? 1 : -1) }
+          : v
+      )
+    );
   }
 
-  // Toggle save
+  // Save video
   async function saveVideo(item) {
     const response = await axios.post(
       "https://reelers-yv6s.onrender.com/api/food/save",
@@ -76,25 +76,42 @@ const Home = () => {
       { withCredentials: true }
     );
 
-    if (response.data.save) {
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, savesCount: v.savesCount + 1 } : v
-        )
-      );
-    } else {
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id ? { ...v, savesCount: v.savesCount - 1 } : v
-        )
-      );
-    }
+    setVideos((prev) =>
+      prev.map((v) =>
+        v._id === item._id
+          ? { ...v, savesCount: v.savesCount + (response.data.save ? 1 : -1) }
+          : v
+      )
+    );
   }
+
+  // Optional: manual scroll snapping (smooth one-at-a-time scroll)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    let timeout;
+    const handleScroll = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const scrollPos = container.scrollTop;
+        const height = window.innerHeight;
+        const index = Math.round(scrollPos / height);
+        container.scrollTo({
+          top: index * height,
+          behavior: "smooth",
+        });
+      }, 50); // Debounce to avoid jank
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div
       ref={containerRef}
-      className="h-screen overflow-y-scroll snap-y snap-mandatory bg-black pb-32"
+      className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth bg-black pb-32"
     >
       {videos.length > 0 ? (
         videos.map((item) => (
@@ -139,7 +156,7 @@ const Home = () => {
             </div>
 
             {/* BOTTOM CONTENT */}
-            <div className="absolute bottom-0 w-full bg-gradient-to from-black to-transparent p-5 pb-24 text-white">
+            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black to-transparent p-5 pb-24 text-white">
               <p className="font-semibold text-lg mb-1">{item.name}</p>
               <p className="text-sm mb-3 opacity-90">{item.description}</p>
 
@@ -167,7 +184,7 @@ const Home = () => {
         </Link>
         <Link to="/user/register" className="flex flex-col items-center text-gray-700">
           <span className="">
-            <i class="ri-login-box-line"></i>
+            <i className="ri-login-box-line"></i>
           </span>
           <span className="text-xs">Sign Up</span>
         </Link>
