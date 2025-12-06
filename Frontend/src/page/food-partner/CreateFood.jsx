@@ -76,7 +76,7 @@ const CreateFood = () => {
         controllerRef.current = new AbortController();
 
         try {
-            const response = await axios.post("http://localhost:3000/api/food", formData, {
+            const response = await axios.post("https://reelers-2-mbh2.onrender.com/api/food", formData, {
                 withCredentials: true,
                 signal: controllerRef.current.signal,
                 onUploadProgress: (progressEvent) => {
