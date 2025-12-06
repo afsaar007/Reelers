@@ -126,7 +126,7 @@ const CreateFood = () => {
             <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl p-8">
 
                 {/* Header */}
-                <Link to='/'><button className='text-3xl '>🔙</button></Link>
+                <Link to='/'><button className='text-2xl '>🔙 To Home</button></Link>
                 <header className="mb-8 text-center">
                     <h1 className="text-3xl font-bold text-gray-900">Create Food</h1>
                     <p className="text-gray-600 mt-1">

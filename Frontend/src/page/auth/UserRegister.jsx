@@ -37,7 +37,7 @@ const UserRegister = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/user/register",
+        "https://reelers-yv6s.onrender.com/api/auth/user/register",
         payload,
         { withCredentials: true } // helps cookie store
       );

@@ -39,7 +39,7 @@ const FoodPartnerRegister = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/foodpartner/register",
+        "https://reelers-yv6s.onrender.com/api/auth/foodpartner/register",
         payload,
         { withCredentials: true }
       );
