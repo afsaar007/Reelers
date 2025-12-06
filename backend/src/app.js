@@ -1,9 +1,9 @@
 // create server 
+import cors from 'cors';
 import express from "express"
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js"
 import foodRoutes from './routes/food.routes.js'
-import cors from 'cors';
 import foodPartnerRoutes from './routes/food-partner.routes.js'
 
 const app = express();
