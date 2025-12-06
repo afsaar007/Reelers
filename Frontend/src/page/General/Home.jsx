@@ -76,13 +76,18 @@ const Home = () => {
       { withCredentials: true }
     );
 
-    setVideos((prev) =>
-      prev.map((v) =>
-        v._id === item._id
-          ? { ...v, savesCount: v.savesCount + (response.data.save ? 1 : -1) }
-          : v
-      )
-    );
+   setVideos((prev) =>
+  prev.map((v) =>
+    v._id === item._id
+      ? { 
+          ...v, 
+          savesCount: Math.max(0, v.savesCount + (response.data.save ? 1 : -1)),
+          isSaved: response.data.save // Update saved status too
+        }
+      : v
+  )
+);
+
   }
 
   // Optional: manual scroll snapping (smooth one-at-a-time scroll)
@@ -156,7 +161,7 @@ const Home = () => {
             </div>
 
             {/* BOTTOM CONTENT */}
-            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black to-transparent p-5 pb-24 text-white">
+            <div className="absolute bottom-0 w-full bg-gradient-to from-black to-transparent p-5 pb-24 text-white">
               <p className="font-semibold text-lg mb-1">{item.name}</p>
               <p className="text-sm mb-3 opacity-90">{item.description}</p>
 

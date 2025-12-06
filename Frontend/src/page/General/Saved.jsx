@@ -118,7 +118,7 @@ const Saved = () => {
             </div>
 
             {/* Video description */}
-            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black to-transparent p-5 pb-24 text-white">
+            <div className="absolute bottom-0 w-full bg-gradient-to from-black to-transparent p-5 pb-24 text-white">
               <p className="font-semibold text-lg mb-1">{item.description}</p>
             </div>
           </div>

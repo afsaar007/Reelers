@@ -64,8 +64,8 @@ const UserRegister = () => {
         </h2>
 
         <h3 className="flex text-sm font-bold text-gray gap-3 mb-6 text-center">
-          Switch <Link to="/user/register"> : User </Link>
-          <Link to="/food-partner/register">: FoodPartner</Link>
+          Switch <Link to="/user/register"><span className="hover:text-blue-200 rounded">:😋 user</span></Link>
+          <Link to="/food-partner/register"><span className="hover:text-blue-200 rounded"> :🙍‍♂️ FoodPartner</span></Link>
         </h3>
 
         <input
